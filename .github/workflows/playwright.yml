@@ -23,4 +23,4 @@ jobs:
 
              
             - name: Listar archivos
-              run: ls -la  
+              run: ls -la
