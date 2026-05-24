@@ -2,17 +2,55 @@ name: Manual
 
 on:
     workflow_dispatch:
+        inputs:
+            log-level:
+                description: 'Nivel de log para las pruebas manuales'
+                required: true
+                default: 'info'
+                type: choice
+                options:
+                    - debug
+                    - info
+                    - warning
+                    - error
+            environment:
+                description: 'Entornos'
+                type: environment       
+
+
+
+            dry-run:
+                description: 'Ejecutar pruebas en modo dry-run'
+                type: boolean
+                default: false
+                required: false
+            
+                
+            reason:
+                description: 'Motivo para ejecutar las pruebas manuales'
+                type: string
+                required: false    
 
 jobs:
     manual:
         runs-on: ubuntu-22.04
         steps:
-            - name: Pruebas Manuales
-              run: echo "Ejecutando pruebas manuales"        
+            - name: Mostrar todos los inputs
+              env:
+                LOG_LEVEL: ${{ inputs.log-level }}
+                ENVIRONMENT: ${{ inputs.environment }}
+                DRY_RUN: ${{ inputs['dry-run'] }}
+                REASON: ${{ inputs.reason }}
+              run: |
+                    echo "Nivel de log: $LOG_LEVEL"
+                    echo "Entorno: $ENVIRONMENT"
+                    echo "Dry-run: $DRY_RUN"
+                    echo "Motivo: $REASON"
 
-            - name: ver fecha y hora
-              run: date
-              
-            - name: ver archivos disponibles
-              run: ls -la  
+            - name: Deploy (solo si no es un dry-run)
+              if: ${{ !inputs.dry-run }}
+              env:
+                  ENVIRONMENT: ${{ inputs.environment }}
+              run: |
+                    echo "Desplegando en el entorno: $ENVIRONMENT"            
 
