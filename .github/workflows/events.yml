@@ -9,6 +9,9 @@ on:
 jobs:
     inspect_event:
         runs-on: ubuntu-22.04
+        permissions:
+          issues: write
+          
         steps:
             - name: Mostrar evento
               run: |
