@@ -23,7 +23,7 @@ jobs:
 
 
             - name: Comentar como un bot en GitHub Actions
-              if: github.event_name == 'issues_comment' && github.event.action == 'opened'
+              if: github.event_name == 'issues' && github.event.action == 'opened'
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -33,7 +33,7 @@ jobs:
 
 
             - name: Comentar como autor del repositorio en GitHub Actions
-              if: github.event_name == 'issues' && github.event.action == 'created'
+              if: github.event_name == 'issues' && github.event.action == 'opened'
               env:
                 AUTHOR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                 ISSUE_NUMBER: ${{ github.event.issue.number }}
