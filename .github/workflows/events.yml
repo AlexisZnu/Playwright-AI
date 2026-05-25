@@ -30,3 +30,20 @@ jobs:
                 GITHUB_REPOSITORY: ${{ github.repository }}
               run:
                 gh issue comment $ISSUE_NUMBER --repo $GITHUB_REPOSITORY --body "¡Gracias por abrir este issue! Un bot de GitHub Actions ha respondido automáticamente."
+
+
+            - name: Comentar como autor del repositorio en GitHub Actions
+              if: github.event_name == 'issue_comment' && github.event.action == 'created'
+              env:
+                AUTHOR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                ISSUE_NUMBER: ${{ github.event.issue.number }}
+              run: |
+               if [[ -z "$AUTHOR_TOKEN" ]]; then
+                 echo "::warning::El token de acceso personal no está configurado. No se puede comentar como autor del repositorio."
+                 exit 0
+                fi
+                GH_TOKEN="$AUTHOR_TOKEN" gh issue comment $ISSUE_NUMBER \
+                --repo $GITHUB_REPOSITORY \
+                --body "Hola, soy el autor del repositorio y he visto tu comentario. ¡Gracias por tu participación!"
+
+                
