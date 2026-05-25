@@ -33,7 +33,7 @@ jobs:
 
 
             - name: Comentar como autor del repositorio en GitHub Actions
-              if: github.event_name == 'issue_comment' && github.event.action == 'created'
+              if: github.event_name == 'issues' && github.event.action == 'created'
               env:
                 AUTHOR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                 ISSUE_NUMBER: ${{ github.event.issue.number }}
