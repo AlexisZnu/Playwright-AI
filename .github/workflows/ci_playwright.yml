@@ -7,7 +7,7 @@ on:
         branches: [main]
 
 jobs:
-    ci_playwright:
+    frontend_lint:
         runs-on: ubuntu-22.04
 
         steps:
@@ -22,5 +22,9 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - name: Run Playwright tests
-              run: npx playwright test       
+    tests_playwright:
+            runs-on: ubuntu-22.04
+
+            steps:
+                - name: Run Playwright tests
+                  run: npm test
