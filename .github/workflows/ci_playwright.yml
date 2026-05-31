@@ -1,40 +1,40 @@
 name: Pruebas Playwright
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-    frontend_lint:
-        runs-on: ubuntu-22.04
+  tests_playwright:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v6
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v6
-              with:
-                node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
 
-            - name: Install dependencies
-              run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-    tests_playwright:
-            runs-on: ubuntu-22.04
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
 
-            steps:
-            - name: Checkout repository
-              uses: actions/checkout@v6
+      - name: Run Playwright tests
+        run: npx playwright test tests/SwagLabs/swagLabs.spec.ts --project=chromium
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v6
-              with:
-                node-version: '18'
-
-            - name: Install Playwright Browsers
-              run: npx playwright install --with-deps
-            - name: Corriendo las pruebas de Playwright
-              run: npx playwright test tests/SwagLabs/swagLabs.spec.ts
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
