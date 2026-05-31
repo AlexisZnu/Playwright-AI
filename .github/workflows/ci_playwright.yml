@@ -10,7 +10,10 @@ on:
 jobs:
   tests_playwright:
     runs-on: ubuntu-22.04
-    timeout-minutes: 60
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --user 1001
+
 
     steps:
       - name: Checkout repository
@@ -24,9 +27,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
         run: npx playwright test tests/SwagLabs/swagLabs.spec.ts --project=chromium
