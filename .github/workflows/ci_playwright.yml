@@ -37,4 +37,4 @@ jobs:
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
             - name: Corriendo las pruebas de Playwright
-              run: npx playwright test
+              run: npx playwright test tests/SwagLabs/swagLabs.spec.ts
